@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CustomRemote</string>
+    <string name="menu_servers">Servers</string>
+    <string name="menu_remotes">Remotes</string>
+</resources>
