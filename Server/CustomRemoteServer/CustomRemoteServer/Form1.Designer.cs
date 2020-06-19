@@ -110,6 +110,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Location = new System.Drawing.Point(81, 5);
             this.textBox1.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+            this.textBox1.MaxLength = 64;
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(225, 20);
             this.textBox1.TabIndex = 4;
@@ -153,6 +154,7 @@
             this.ClientSize = new System.Drawing.Size(333, 127);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Custom Remote";
             this.SizeChanged += new System.EventHandler(this.Form1_Resize);

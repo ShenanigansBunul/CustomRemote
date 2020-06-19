@@ -18,14 +18,13 @@ namespace CustomRemoteServer
         int screenServerStatus = 0; // stopped, starting, running non connected, running connected??
         string clientName = "";
         string serverName = Environment.MachineName + "-SERVER";
-        Thread commandServerThread;
+        Thread commandServerThread, pingServerThread;
         CommandServer commandServer = new CommandServer();
+        PingServer pingServer = new PingServer();
         public Form1()
         {
             InitializeComponent();
             textBox1.Text = serverName;
-            PingServer noi = new PingServer();
-            noi.StartServer();
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -62,6 +61,7 @@ namespace CustomRemoteServer
         private void ChangeServerName(object sender, EventArgs e)
         {
             serverName = textBox1.Text;
+            pingServer.SetName(textBox1.Text);
         }
 
         private void UpdateServerButton()
@@ -70,16 +70,19 @@ namespace CustomRemoteServer
             {
                 button1.Text = "Start Server";
                 button1.Enabled = true;
+                textBox1.Enabled = true;
             }
             else if(commandServerStatus == 1)
             {
                 button1.Text = "Starting Server...";
                 button1.Enabled = false;
+                textBox1.Enabled = false;
             }
             else if(commandServerStatus == 2 || commandServerStatus == 3)
             {
                 button1.Text = "Stop Server";
                 button1.Enabled = true;
+                textBox1.Enabled = false;
             }
         }
 
@@ -91,6 +94,9 @@ namespace CustomRemoteServer
                 UpdateServerButton();
                 commandServerThread = new Thread(commandServer.StartServer);
                 commandServerThread.Start();
+                pingServerThread = new Thread(pingServer.StartServer);
+                pingServerThread.Start();
+
 
                 commandServerStatus = 2;
                 UpdateServerButton();
@@ -98,6 +104,7 @@ namespace CustomRemoteServer
             else if(commandServerStatus == 2 || commandServerStatus == 3)
             {
                 commandServer.StopServer();
+                pingServer.StopServer();
                 commandServerStatus = 0;
                 UpdateServerButton();
             }

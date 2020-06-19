@@ -34,7 +34,5 @@ public class ServersActivity extends MenuActivity {
         cs.sendMessage("zarzavat");
         cs.sendMessage("zarzavat 2");
         Log.d("dbg", "o iesit ba");
-        //Client tc = new Client("192.168.1.9",5800);
-        //tc.startServer();
     }
 }

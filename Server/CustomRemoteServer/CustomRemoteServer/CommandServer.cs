@@ -11,7 +11,21 @@ namespace CustomRemoteServer
 {
     class CommandServer
     {
-        IPAddress ipAddress = IPAddress.Parse("192.168.1.9");
+        private static IPAddress LocalIPAddress()
+        {
+            if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            {
+                return null;
+            }
+
+            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+
+            return host
+                .AddressList
+                .FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
+        }
+
+        IPAddress ipAddress = LocalIPAddress(); //IPAddress.Parse("192.168.1.9");
         Int32 port = 5800;
         TcpListener listener;
         bool stop;
@@ -27,7 +41,7 @@ namespace CustomRemoteServer
             }
             
             listener.Start();
-            Console.WriteLine("Server Started");
+            Console.WriteLine("Command server started");
             stop = false;
 
             Byte[] bytes = new Byte[1024];
@@ -68,10 +82,9 @@ namespace CustomRemoteServer
                 }
                 catch(SocketException e)
                 {
-                    Console.WriteLine("o dat ba");
                     if (stop)
                     {
-                        Console.WriteLine("Server stopped");
+                        Console.WriteLine("Command server stopped");
                     }
                 }
                 data = null;
