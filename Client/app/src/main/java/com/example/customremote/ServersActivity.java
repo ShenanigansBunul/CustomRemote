@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -18,6 +19,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ServersActivity extends MenuActivity {
 
@@ -25,14 +29,14 @@ public class ServersActivity extends MenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final TextView tv = (TextView) findViewById(R.id.textView);
-        Log.d("dbg", "0");
-        //new Thread(new CommandServer()).start();
+
         CommandServer cs = CommandServer.getInstance();
-        new Thread(cs).start();
-        //while(!cs.isRunning());
-        cs.sendMessage("zarzavat");
-        cs.sendMessage("zarzavat 2");
-        Log.d("dbg", "o iesit ba");
+
+        ArrayList<String> list = new ArrayList<String>(Arrays.asList("192.168.1.9,222,333,444,555,666".split(",")));
+        final ListView lv = findViewById(R.id.listview);
+        lv.setAdapter(new ServerListAdapter(list, this.getApplicationContext()));
+
+
+        Log.d("dbg", "test msg sent");
     }
 }

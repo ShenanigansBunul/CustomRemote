@@ -15,19 +15,28 @@ class CommandServer implements Runnable{
     private boolean isRunning;
     private Queue<String> messageQueue;
     private static CommandServer instance;
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    private String ip;
     private CommandServer(){
 
     }
     @Override
     public void run(){
         try{
-            socket = new Socket("192.168.1.9", 5800);
+            socket = new Socket(ip, 5800);
             writer = new PrintWriter(socket.getOutputStream());
             messageQueue = new LinkedBlockingQueue<String>();
             isRunning = true;
             while(isRunning){
                 while(!messageQueue.isEmpty()){
-                    Log.d("dbg", "ruleaza 2");
                     writer.print(messageQueue.poll());
                     writer.flush();
                 }
@@ -35,16 +44,14 @@ class CommandServer implements Runnable{
             writer.close();
             socket.close();
         } catch (Exception e) {
-            Log.d("dbg", "exceptie bai");
             e.printStackTrace();
         }
     }
+
     public boolean sendMessage(String message){
         if(!isRunning){
-            Log.d("dbg", "false");
             return false;
         }
-        Log.d("dbg", "true");
         messageQueue.add(message);
         return true;
     }

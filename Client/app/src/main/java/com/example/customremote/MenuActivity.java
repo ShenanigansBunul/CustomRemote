@@ -26,6 +26,8 @@ public class MenuActivity extends AppCompatActivity {
             case R.id.screen:
                 switchToActivity(ScreenActivity.class);
                 return true;
+            case R.id.trackpad:
+                switchToActivity(TrackpadActivity.class);
             default:
                 return super.onOptionsItemSelected(item);
         }

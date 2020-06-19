@@ -6,5 +6,7 @@
         android:title="@string/menu_remotes" />
     <item android:id="@+id/screen"
         android:title="@string/menu_screen" />
+    <item android:id="@+id/trackpad"
+        android:title="@string/trackpad"/>
 
 </menu>
