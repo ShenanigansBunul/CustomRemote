@@ -24,6 +24,8 @@ namespace CustomRemoteServer
         {
             InitializeComponent();
             textBox1.Text = serverName;
+            PingServer noi = new PingServer();
+            noi.StartServer();
         }
 
         private void Form1_Resize(object sender, EventArgs e)

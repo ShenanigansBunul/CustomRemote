@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/servers"
+        android:title="@string/menu_servers" />
+    <item android:id="@+id/remotes"
+        android:title="@string/menu_remotes" />
+    <item android:id="@+id/screen"
+        android:title="@string/menu_screen" />
+
+</menu>
