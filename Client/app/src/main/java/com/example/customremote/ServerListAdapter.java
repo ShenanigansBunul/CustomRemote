@@ -58,7 +58,6 @@ public class ServerListAdapter extends BaseAdapter implements ListAdapter {
             @Override
             public void onClick(View v) {
                 CommandServer cs = CommandServer.getInstance();
-                Log.d("dbg_serverlist", list.get(position).name);
                 cs.setIp(list.get(position).ip);
                 new Thread(cs).start();
             }

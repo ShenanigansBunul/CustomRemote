@@ -30,7 +30,6 @@ namespace CustomRemoteServer
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            Console.WriteLine("Test");
             if (this.WindowState == FormWindowState.Minimized)
             {
                 Hide();
