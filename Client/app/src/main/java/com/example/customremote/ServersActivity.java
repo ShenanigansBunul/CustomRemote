@@ -1,42 +1,49 @@
 package com.example.customremote;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ServersActivity extends MenuActivity {
-
+    private static ArrayList<ServerListInfo> serverInfo = new ArrayList<>();
+    ServerListAdapter sva;
+    boolean stop = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final Button rb = findViewById(R.id.refresh_button);
+        ListView lv = findViewById(R.id.listview);
+        this.getSupportActionBar().setTitle("Server List");
 
-        CommandServer cs = CommandServer.getInstance();
+        sva = new ServerListAdapter(serverInfo, this.getApplicationContext());
+        lv.setAdapter(sva);
 
-        ArrayList<String> list = new ArrayList<String>(Arrays.asList("192.168.1.9,222,333,444,555,666".split(",")));
-        final ListView lv = findViewById(R.id.listview);
-        lv.setAdapter(new ServerListAdapter(list, this.getApplicationContext()));
+        rb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final SpecializedNetworkDiscovery specializedNetworkDiscovery = new SpecializedNetworkDiscovery();
+                Thread t = new Thread(specializedNetworkDiscovery);
+                t.start();
+                try {
+                    t.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                serverInfo = specializedNetworkDiscovery.getServerList();
+                ServersActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        sva.setList(serverInfo);
+                        sva.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
 
-
-        Log.d("dbg", "test msg sent");
+        //rb.callOnClick();
     }
 }

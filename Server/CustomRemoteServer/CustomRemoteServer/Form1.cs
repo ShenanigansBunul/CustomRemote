@@ -24,6 +24,7 @@ namespace CustomRemoteServer
         public Form1()
         {
             InitializeComponent();
+            CommandHandler ch = CommandHandler.GetInstance();
             textBox1.Text = serverName;
         }
 
@@ -37,14 +38,6 @@ namespace CustomRemoteServer
             }
         }
 
-        public void MoveMouse()
-        {
-            Win32.POINT p = new Win32.POINT();
-            p.x = Convert.ToInt16(33);
-            p.y = Convert.ToInt16(333);
-            //Win32.ClientToScreen(this.Handle, ref p);
-            Win32.SetCursorPos(p.x, p.y);
-        }
 
         private void RestoreWindow(object sender, MouseEventArgs e)
         {

@@ -43,11 +43,14 @@ namespace CustomRemoteServer
                 try
                 {
                     TcpClient client = listener.AcceptTcpClient();
+                    Console.WriteLine("Ping client connected");
                     var stream = client.GetStream();
                     var writer = new StreamWriter(stream);
-                    Byte[] sendBytes = Encoding.ASCII.GetBytes(serverName);
+                    Byte[] sendBytes = Encoding.ASCII.GetBytes(serverName+"\n");
                     stream.Write(sendBytes, 0, sendBytes.Length);
+                    Console.WriteLine("Name sent");
                     client.Close();
+                    Console.WriteLine("Closed ping client");
                 }
                 catch (SocketException e)
                 {

@@ -11,13 +11,15 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class ServerListAdapter extends BaseAdapter implements ListAdapter {
-    private ArrayList<String> list = new ArrayList<String>();
+    private ArrayList<ServerListInfo> list;
     private Context context;
 
-    public ServerListAdapter(ArrayList<String> list, Context context) {
+    public ServerListAdapter(ArrayList<ServerListInfo> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -46,7 +48,9 @@ public class ServerListAdapter extends BaseAdapter implements ListAdapter {
         }
 
         TextView svName= (TextView)view.findViewById(R.id.svName);
-        svName.setText(list.get(position));
+        svName.setText(list.get(position).name);
+        TextView svIp = (TextView)view.findViewById(R.id.svIp);
+        svIp.setText(list.get(position).ip);
 
         Button conbtn= (Button)view.findViewById(R.id.btn);
 
@@ -54,11 +58,9 @@ public class ServerListAdapter extends BaseAdapter implements ListAdapter {
             @Override
             public void onClick(View v) {
                 CommandServer cs = CommandServer.getInstance();
-                Log.d("dbg", String.valueOf(v.getId()));
-                //cs.setIp(v.)
-                //new Thread(cs).start();
-                //cs.sendMessage("test msg");
-                //cs.sendMessage("test msg 2");
+                Log.d("dbg_serverlist", list.get(position).name);
+                cs.setIp(list.get(position).ip);
+                new Thread(cs).start();
             }
         });
         /*addBtn.setOnClickListener(new View.OnClickListener(){
@@ -71,5 +73,9 @@ public class ServerListAdapter extends BaseAdapter implements ListAdapter {
         });*/
 
         return view;
+    }
+
+    public void setList(ArrayList<ServerListInfo> serverInfo) {
+        this.list = serverInfo;
     }
 }

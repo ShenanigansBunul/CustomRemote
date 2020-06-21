@@ -43,6 +43,7 @@ namespace CustomRemoteServer
             listener.Start();
             Console.WriteLine("Command server started");
             stop = false;
+            CommandHandler commandHandler = CommandHandler.GetInstance();
 
             Byte[] bytes = new Byte[1024];
             String data;
@@ -52,6 +53,7 @@ namespace CustomRemoteServer
                 try
                 {
                     TcpClient client = listener.AcceptTcpClient();
+                    Console.WriteLine("Command client");
                     var stream = client.GetStream();
                     var reader = new StreamReader(stream);
                     StreamWriter writer = new StreamWriter(stream);
@@ -75,7 +77,9 @@ namespace CustomRemoteServer
                             string received = Encoding.ASCII.GetString(serverData, 0, length);
                             if (received != "")
                             {
+                                Console.WriteLine("this is a received:");
                                 Console.WriteLine(received);
+                                commandHandler.HandleCommand(received);
                             }
                         }
                     }
