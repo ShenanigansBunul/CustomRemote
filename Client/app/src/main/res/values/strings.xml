@@ -5,5 +5,7 @@
     <string name="menu_screen">Screen</string>
     <string name="server_list_connect">Connect</string>
     <string name="trackpad">Trackpad</string>
-    <string name="refesh">Refresh</string>
+    <string name="refesh">Find Servers</string>
+    <string name="favorites">Favorites:</string>
+    <string name="server_list">Server List:</string>
 </resources>

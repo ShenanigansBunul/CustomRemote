@@ -44,6 +44,7 @@ class CommandServer implements Runnable{
             writer.close();
             socket.close();
         } catch (Exception e) {
+            isRunning = false;
             e.printStackTrace();
         }
     }
