@@ -1,6 +1,5 @@
 package com.example.customremote;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -8,7 +7,11 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MenuActivity extends AppCompatActivity {
+import com.example.customremote.activities.RemotesActivity;
+import com.example.customremote.activities.ScreenActivity;
+import com.example.customremote.activities.ServersActivity;
+
+public abstract class MenuActivity extends AppCompatActivity {
     void switchToActivity(Class act){
         Intent intent = new Intent(this, act);
         startActivity(intent);

@@ -1,4 +1,4 @@
-package com.example.customremote;
+package com.example.customremote.activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,11 +17,15 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.customremote.CommandServer;
+import com.example.customremote.MenuActivity;
+import com.example.customremote.R;
+import com.example.customremote.ServerListInfo;
+import com.example.customremote.SpecializedNetworkDiscovery;
+
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 class FindServers extends AsyncTask<Void, String, ArrayList<ServerListInfo>>{
@@ -55,11 +59,34 @@ class FindServers extends AsyncTask<Void, String, ArrayList<ServerListInfo>>{
 
 class ServerListAdapter extends BaseAdapter implements ListAdapter {
     private ArrayList<ServerListInfo> list;
+    private ArrayList<Boolean> favorited = new ArrayList<>();
     private Context context;
+    private ServersActivity app_context;
 
-    public ServerListAdapter(ArrayList<ServerListInfo> list, Context context) {
+    public Boolean getFavorited(int index) {
+        return favorited.get(index);
+    }
+
+    public void setFavorited(int index, Boolean f) {
+        favorited.set(index, f);
+    }
+
+    public void genFavorited(){
+        favorited.clear();
+        for(ServerListInfo i: list){
+            if (app_context.isInFavorites(i))
+                favorited.add(true);
+            else
+                favorited.add(false);
+        }
+    };
+
+
+    public ServerListAdapter(ArrayList<ServerListInfo> list, Context context, ServersActivity app_context) {
         this.list = list;
         this.context = context;
+        this.app_context = app_context;
+        genFavorited();
     }
 
     @Override
@@ -86,18 +113,33 @@ class ServerListAdapter extends BaseAdapter implements ListAdapter {
         }
 
         TextView svName= (TextView)view.findViewById(R.id.svName);
-        svName.setText(list.get(position).name);
+        svName.setText(list.get(position).getName());
         TextView svIp = (TextView)view.findViewById(R.id.svIp);
-        svIp.setText(list.get(position).ip);
+        svIp.setText(list.get(position).getIp());
 
         Button conBtn= (Button)view.findViewById(R.id.btn);
         Button favBtn= (Button)view.findViewById(R.id.btnFav);
+
+        final ServersActivity c = (ServersActivity)parent.getContext();
+        ArrayList<ServerListInfo> a = c.getFavoritesFromPreferences();
+        boolean f = false;
+        for(ServerListInfo i: a){
+            if (i.getIp().equals(list.get(position).getIp())){
+                f = true;
+                break;
+            }
+        }
+        if(f){
+            favBtn.setBackgroundResource(R.drawable.star);
+        }
+
+
         conBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 CommandServer cs = CommandServer.getInstance();
                 if(!cs.isRunning()) {
-                    cs.setIp(list.get(position).ip);
+                    cs.setIp(list.get(position).getIp());
                     new Thread(cs).start();
                 }
             }
@@ -105,9 +147,14 @@ class ServerListAdapter extends BaseAdapter implements ListAdapter {
         favBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (context instanceof ServersActivity) {
-                    ((ServersActivity)context).addFavoriteToPreferences(list.get(position));
+                if(getFavorited(position)){
+                    c.removeFavoriteFromPreferences(list.get(position));
                 }
+                else{
+                    Log.d("dbg_watsup", "clicky add");
+                    c.addFavoriteToPreferences(list.get(position));
+                }
+                c.refreshLists();
             }
         });
         /*addBtn.setOnClickListener(new View.OnClickListener(){
@@ -124,6 +171,7 @@ class ServerListAdapter extends BaseAdapter implements ListAdapter {
 
     public void setList(ArrayList<ServerListInfo> serverInfo) {
         this.list = serverInfo;
+        genFavorited();
     }
 }
 
@@ -131,6 +179,20 @@ public class ServersActivity extends MenuActivity {
     private static ArrayList<ServerListInfo> favoriteList = new ArrayList<>();
     private static ArrayList<ServerListInfo> serverSearch = new ArrayList<>();
     ServerListAdapter sva, fva;
+
+    void refreshLists(){
+        ListView lv = findViewById(R.id.listview);
+        ListView flv = findViewById(R.id.listviewFav);
+        favoriteList = getFavoritesFromPreferences();
+        fva = new ServerListAdapter(favoriteList, this.getApplicationContext(), this);
+        //if(serverSearch.size() == 0)
+        //    sva = new ServerListAdapter(serverSearch, this.getApplicationContext(), this);
+        sva.notifyDataSetChanged();
+        fva.notifyDataSetChanged();
+        sva.genFavorited();
+        lv.setAdapter(sva);
+        flv.setAdapter(fva);
+    }
 
     ArrayList<ServerListInfo> getFavoritesFromPreferences(){
         try {
@@ -152,15 +214,43 @@ public class ServersActivity extends MenuActivity {
     }
 
     void addFavoriteToPreferences(ServerListInfo fav){
-        ArrayList<ServerListInfo> favs = getFavoritesFromPreferences();    // duplicate checking whatever
-        favs.add(fav);
+        ArrayList<ServerListInfo> favs = getFavoritesFromPreferences();
+        boolean found = false;
+        for(ServerListInfo s: favs){
+            if(s.getIp().equals(fav.getIp())){
+                s.setName(fav.getName());
+                found = true;
+            }
+        }
+        if(!found)
+            favs.add(fav);
         setFavoritesToPreferences(favs);
     }
 
     void removeFavoriteFromPreferences(ServerListInfo fav){
-        ArrayList<ServerListInfo> favs = getFavoritesFromPreferences();    // name things
-        favs.remove(fav);
+        ArrayList<ServerListInfo> favs = getFavoritesFromPreferences();
+        Log.d("dbg_www","removin");
+        int index = -1;
+        for(int i = 0; i < favs.size(); i++){
+            if (favs.get(i).getIp().equals(fav.getIp())){
+                index = i;
+                break;
+            }
+        }
+        if(index > -1){
+            favs.remove(index);
+        }
+        Log.d("dbg_www","removed");
         setFavoritesToPreferences(favs);
+    }
+
+    boolean isInFavorites(ServerListInfo f){
+        for(ServerListInfo i: getFavoritesFromPreferences()){
+            if (i.getIp().equals(f.getIp()) && i.getName().equals(f.getName())){
+                return true;
+            }
+        }
+        return false;
     }
 
     void setFavoritesToPreferences(ArrayList<ServerListInfo> favs){
@@ -181,23 +271,9 @@ public class ServersActivity extends MenuActivity {
         this.getSupportActionBar().setTitle("Server List");
         setContentView(R.layout.activity_main);
         final Button rb = findViewById(R.id.refresh_button);
-        ListView lv = findViewById(R.id.listview);
-        ListView flv = findViewById(R.id.listviewFav);
 
-        ArrayList<ServerListInfo> testList = new ArrayList<>();
-        ServerListInfo test = new ServerListInfo("ippp","nmmm");
-        ServerListInfo test2 = new ServerListInfo("ippp","cool");
-        testList.add(test);
-        testList.add(test2);
-        setFavoritesToPreferences(testList);
-
-        favoriteList = getFavoritesFromPreferences();
-
-        fva = new ServerListAdapter(favoriteList, this.getApplicationContext());
-        sva = new ServerListAdapter(serverSearch, this.getApplicationContext());
-        lv.setAdapter(sva);
-        flv.setAdapter(fva);
-
+        sva = new ServerListAdapter(serverSearch, this.getApplicationContext(), this);
+        refreshLists();
 
         rb.setOnClickListener(new View.OnClickListener() {
             @Override

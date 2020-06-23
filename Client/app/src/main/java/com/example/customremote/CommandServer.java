@@ -9,7 +9,7 @@ import java.util.Deque;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-class CommandServer implements Runnable{
+public class CommandServer implements Runnable{
     private Socket socket;
     private PrintWriter writer;
     private boolean isRunning;

@@ -12,11 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".TrackpadActivity"></activity>
-        <activity android:name=".EditRemoteActivity" />
+        <activity android:name=".activities.EditRemoteActivity" />
         <activity android:name=".AddRemoteActivity" />
-        <activity android:name=".ScreenActivity" />
-        <activity android:name=".RemotesActivity" />
-        <activity android:name=".ServersActivity">
+        <activity android:name=".activities.ScreenActivity" />
+        <activity android:name=".activities.RemotesActivity" />
+        <activity android:name=".activities.ServersActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

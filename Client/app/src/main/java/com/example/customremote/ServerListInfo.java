@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class ServerListInfo {
     String ip;
     String name;
-    ServerListInfo(String ip, String name){
+    public ServerListInfo(String ip, String name){
         this.ip = ip;
         this.name = name;
     }
