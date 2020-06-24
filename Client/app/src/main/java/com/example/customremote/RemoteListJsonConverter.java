@@ -1,10 +1,5 @@
 package com.example.customremote;
 
-import com.example.customremote.actions.KeyPress;
-import com.example.customremote.actions.MouseClick;
-import com.example.customremote.actions.Nothing;
-import com.example.customremote.actions.Wait;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +26,7 @@ public class RemoteListJsonConverter {
                     JSONArray baJsonArray = new JSONArray();
                     for (RemoteButtonAction rba : b.getActions()) {
                         JSONObject rbaJson = new JSONObject();
-                        rbaJson.put("type", rba.type);
+                        rbaJson.put("type", rba.getType());
                         JSONObject params_json = new JSONObject();
                         rbaJson.put("params", params_json);
                         for (Map.Entry<String, String> entry : rba.getParams().entrySet()) {
@@ -66,18 +61,16 @@ public class RemoteListJsonConverter {
                         JSONObject but = bJsonArray.getJSONObject(m);
                         RemoteButton remBut = new RemoteButton(but.getString("text"));
                         rem.addButton(remBut);
+                        ArrayList<RemoteButtonAction> acs = new ArrayList<>();
+
                         JSONArray baJsonArray = but.getJSONArray("actions");
                         for (int n = 0; n < baJsonArray.length(); n++) {
                             JSONObject act = baJsonArray.getJSONObject(n);
-                            RemoteButtonAction ac = new Nothing();
                             String type = act.getString("type");
-                            if (type.equals("wait")) {
-                                ac = new Wait();
-                            } else if (type.equals("keypress")) {
-                                ac = new KeyPress();
-                            } else if (type.equals("mouseclick")) {
-                                ac = new MouseClick();
-                            }
+
+                            RemoteButtonAction ac = new RemoteButtonAction("");
+                            ac.setType(type);
+
                             Map<String, String> params = new HashMap<>();
                             JSONObject parJson = act.getJSONObject("params");
                             for (Iterator<String> it2 = parJson.keys(); it2.hasNext(); ) {
@@ -87,7 +80,10 @@ public class RemoteListJsonConverter {
                                 }
                             }
                             ac.setParams(params);
+                            acs.add(ac);
+
                         }
+                        remBut.setActions(acs);
                         rb.add(remBut);
                     }
                     r.add(rem);

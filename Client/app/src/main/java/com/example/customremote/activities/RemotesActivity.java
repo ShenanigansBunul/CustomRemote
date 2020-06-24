@@ -31,10 +31,7 @@ import com.example.customremote.Remote;
 import com.example.customremote.RemoteButton;
 import com.example.customremote.RemoteButtonAction;
 import com.example.customremote.ServerListInfo;
-import com.example.customremote.actions.KeyPress;
-import com.example.customremote.actions.MouseClick;
 import com.example.customremote.RemoteListJsonConverter;
-import com.example.customremote.actions.Wait;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -185,8 +182,8 @@ public class RemotesActivity extends MenuActivity {
                             Remote newRemote = new Remote(n.getText().toString(), wi, he);
                             remotes.add(newRemote);
                             setRemotesToPreferences(remotes);
-                            rla.notifyDataSetChanged();
                         }
+                        rla.notifyDataSetChanged();
                         dialog.dismiss();
                     }
                 });

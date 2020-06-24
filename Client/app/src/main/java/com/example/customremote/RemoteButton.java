@@ -40,7 +40,7 @@ public class RemoteButton implements Runnable{
     public void run() {
         running = true;
         for(RemoteButtonAction q: actions){
-            q.performAction();
+            q.run();
         }
     }
 }

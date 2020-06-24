@@ -3,7 +3,19 @@
     <string-array name="Actions">
         <item>Nothing</item>
         <item>Click</item>
-        <item>Press Key</item>
         <item>Wait</item>
+        <item>Press Key</item>
+        <item>Press Key (Special)</item>
+    </string-array>
+    <string-array name="Keys">
+        <item>Left Ctrl</item>
+        <item>Left Shift</item>
+        <item>Left Alt</item>
+        <item>Right Ctrl</item>
+        <item>Right Shift</item>
+        <item>Right Alt</item>
+        <item>Delete</item>
+        <item>Windows</item>
+        <item>Tab</item>
     </string-array>
 </resources>

@@ -25,75 +25,22 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:text = "Action Type:"/>
+
             <Spinner
-                android:id="@+id/spinner1"
+                android:id="@+id/typeSpinner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:entries="@array/test" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/actText1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-            <EditText
-                android:id="@+id/actTextInput1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:inputType="text"
-                android:entries="@array/test" />
+                android:entries="@array/Actions"
+                android:spinnerMode="dropdown" />
         </LinearLayout>
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/actSpinner1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-            <Spinner
-                android:id="@+id/actSpinnerInput1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:entries="@array/test" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/actNum1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-            <EditText
-                android:id="@+id/actNumInput1"
-                android:inputType="numberDecimal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:entries="@array/test" />
-        </LinearLayout>
+            android:orientation="vertical"
+            android:id="@+id/paramLayout"/>
         <Button
+            android:id="@+id/removeActionButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Remove"/>
