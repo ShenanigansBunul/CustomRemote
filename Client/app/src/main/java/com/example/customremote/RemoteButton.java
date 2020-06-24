@@ -2,7 +2,41 @@ package com.example.customremote;
 
 import java.util.ArrayList;
 
-class RemoteButton {
-    String text;
-    ArrayList<RemoteButtonAction> actions;
+public class RemoteButton implements Runnable{
+    public RemoteButton(String text){
+        this.text = text;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    boolean running = false;
+    private String text;
+
+    public ArrayList<RemoteButtonAction> getActions() {
+        return actions;
+    }
+
+    public void setActions(ArrayList<RemoteButtonAction> actions) {
+        this.actions = actions;
+    }
+
+    public void addAction(RemoteButtonAction act){
+        this.actions.add(act);
+    }
+
+    ArrayList<RemoteButtonAction> actions = new ArrayList<>();
+
+    @Override
+    public void run() {
+        running = true;
+        for(RemoteButtonAction q: actions){
+            q.performAction();
+        }
+    }
 }

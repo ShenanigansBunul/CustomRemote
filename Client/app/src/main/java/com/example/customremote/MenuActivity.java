@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.customremote.activities.RemotesActivity;
 import com.example.customremote.activities.ScreenActivity;
 import com.example.customremote.activities.ServersActivity;
+import com.example.customremote.activities.TrackpadActivity;
 
 public abstract class MenuActivity extends AppCompatActivity {
     void switchToActivity(Class act){

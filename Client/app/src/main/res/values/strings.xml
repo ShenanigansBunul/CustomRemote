@@ -8,4 +8,6 @@
     <string name="refesh">Find Servers</string>
     <string name="favorites">Favorites:</string>
     <string name="server_list">Server List:</string>
+    <string name="remote_list_edit">Edit</string>
+    <string name="remote_list_use">Use</string>
 </resources>

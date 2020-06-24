@@ -1,4 +1,4 @@
-package com.example.customremote;
+package com.example.customremote.activities;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +16,10 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import com.example.customremote.CommandServer;
+import com.example.customremote.MenuActivity;
+import com.example.customremote.R;
 
 import java.time.Instant;
 

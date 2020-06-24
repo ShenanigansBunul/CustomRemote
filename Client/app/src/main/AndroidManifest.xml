@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TrackpadActivity"></activity>
+        <activity android:name=".activities.EditButtonActivity"></activity>
+        <activity android:name=".activities.RemoteActivity" />
+        <activity android:name=".activities.TrackpadActivity" />
         <activity android:name=".activities.EditRemoteActivity" />
         <activity android:name=".AddRemoteActivity" />
         <activity android:name=".activities.ScreenActivity" />
