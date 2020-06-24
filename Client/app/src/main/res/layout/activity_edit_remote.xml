@@ -27,6 +27,7 @@
                     android:layout_height="wrap_content"
                     android:text= "Name:"/>
                 <EditText
+                    android:maxLines="1"
                     android:id="@+id/name_input"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
@@ -41,6 +42,7 @@
                     android:layout_height="wrap_content"
                     android:text= "Width:"/>
                 <EditText
+                    android:maxLines="1"
                     android:id="@+id/width_input"
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
@@ -52,6 +54,7 @@
                     android:layout_height="wrap_content"
                     android:text= "Height:"/>
                 <EditText
+                    android:maxLines="1"
                     android:id="@+id/height_input"
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"

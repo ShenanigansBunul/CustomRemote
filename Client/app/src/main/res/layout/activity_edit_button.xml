@@ -29,6 +29,7 @@
                     android:textStyle="bold"
                     android:text="Button Text:"/>
                 <EditText
+                    android:maxLines="1"
                     android:id="@+id/buttonTextEdit"
                     android:inputType="text"
                     android:layout_width="0dp"

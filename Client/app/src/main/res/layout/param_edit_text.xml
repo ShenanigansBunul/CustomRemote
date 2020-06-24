@@ -13,6 +13,7 @@
         android:id="@+id/paramInput"
         android:inputType="text"
         android:layout_width="0dp"
+        android:maxLines="1"
         android:minWidth="100dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.5" />

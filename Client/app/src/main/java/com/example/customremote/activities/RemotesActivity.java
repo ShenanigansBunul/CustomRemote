@@ -153,7 +153,7 @@ public class RemotesActivity extends MenuActivity {
         this.getSupportActionBar().setTitle("Remote List");
         remotes = getUpdatedRemotes();
         rla = new RemoteListAdapter(remotes, this.getApplicationContext());
-        ListView lv = findViewById(R.id.listviewRemotes);
+        final ListView lv = findViewById(R.id.listviewRemotes);
         Button add = findViewById(R.id.addRemoteBtn);
         lv.setAdapter(rla);
         rla.notifyDataSetChanged();
@@ -183,8 +183,16 @@ public class RemotesActivity extends MenuActivity {
                             remotes.add(newRemote);
                             setRemotesToPreferences(remotes);
                         }
-                        rla.notifyDataSetChanged();
+                        runOnUiThread(new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                rla = new RemoteListAdapter(remotes, RemotesActivity.this.getApplicationContext());
+                                lv.setAdapter(rla);
+                                rla.notifyDataSetChanged();
+                            }
+                        }));
                         dialog.dismiss();
+
                     }
                 });
                 dialog.show();

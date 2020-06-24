@@ -4,7 +4,7 @@
     <string name="menu_remotes">Remotes</string>
     <string name="menu_screen">Screen</string>
     <string name="server_list_connect">Connect</string>
-    <string name="trackpad">Trackpad</string>
+    <string name="trackpad">Trackpad &amp; Keyboard</string>
     <string name="refesh">Find Servers</string>
     <string name="favorites">Favorites:</string>
     <string name="server_list">Server List:</string>

@@ -27,6 +27,7 @@
                 android:id="@+id/editName"
                 android:inputType="text"
                 android:layout_width="0dp"
+                android:maxLines="1"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5" />
         </LinearLayout>
@@ -46,6 +47,7 @@
             <EditText
                 android:id="@+id/editWidth"
                 android:inputType="numberSigned"
+                android:maxLines="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5" />
@@ -67,6 +69,7 @@
                 android:id="@+id/editHeight"
                 android:inputType="numberSigned"
                 android:layout_width="0dp"
+                android:maxLines="1"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5" />
         </LinearLayout>

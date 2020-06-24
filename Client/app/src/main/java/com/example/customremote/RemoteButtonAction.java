@@ -32,10 +32,21 @@ public class RemoteButtonAction implements Runnable{
     @Override
     public void run() {
         try {
+            CommandServer cs = CommandServer.getInstance();
             if (type.equals("Wait")) {
                 Thread.sleep(Integer.parseInt(params.get("wait")));
-            } else if (type.equals("mouseclick")) {
-
+            } else if (type.equals("Click")) {
+                if(params.get("click").equals("0"))
+                    cs.sendMessage("MLC\n");
+                else if(params.get("click").equals("1"))
+                    cs.sendMessage("MRC\n");
+            } else if (type.equals("Press Key")) {
+                String keys = params.get("keys");
+                cs.sendMessage("WRT:"+keys+"\n");
+            } else if (type.equals("Press Key (Special)")) {
+                int i = Integer.parseInt(params.get("special"));
+                int x = KeyCodes.codeOf(KeyCodes.valueAt(i));
+                cs.sendMessage("KEY:"+String.valueOf(x)+"\n");
             }
         }
         catch (InterruptedException e){

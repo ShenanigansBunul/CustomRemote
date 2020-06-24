@@ -8,15 +8,35 @@
         <item>Press Key (Special)</item>
     </string-array>
     <string-array name="Keys">
-        <item>Left Ctrl</item>
-        <item>Left Shift</item>
-        <item>Left Alt</item>
-        <item>Right Ctrl</item>
-        <item>Right Shift</item>
-        <item>Right Alt</item>
-        <item>Delete</item>
+        <item>Shift</item>
+        <item>Ctrl</item>
+        <item>CapsLock</item>
+        <item>NumLock</item>
+        <item>Alt</item>
+        <item>Backspace</item>
+        <item>Enter</item>
         <item>Windows</item>
-        <item>Tab</item>
+        <item>Delete</item>
+        <item>PgUp</item>
+        <item>PgDn</item>
+        <item>Home</item>
+        <item>End</item>
+        <item>LeftArrow</item>
+        <item>UpArrow</item>
+        <item>RightArrow</item>
+        <item>DownArrow</item>
+        <item>F1</item>
+        <item>F2</item>
+        <item>F3</item>
+        <item>F4</item>
+        <item>F5</item>
+        <item>F6</item>
+        <item>F7</item>
+        <item>F8</item>
+        <item>F9</item>
+        <item>F10</item>
+        <item>F11</item>
+        <item>F12</item>
     </string-array>
     <string-array name="Clicks">
         <item>Left</item>
