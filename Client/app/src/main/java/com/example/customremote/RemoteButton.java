@@ -26,6 +26,10 @@ public class RemoteButton implements Runnable{
         this.actions = actions;
     }
 
+    public void clearActions(){
+        this.actions.clear();
+    }
+
     public void addAction(RemoteButtonAction act){
         this.actions.add(act);
     }

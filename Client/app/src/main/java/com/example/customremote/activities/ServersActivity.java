@@ -151,7 +151,6 @@ class ServerListAdapter extends BaseAdapter implements ListAdapter {
                     c.removeFavoriteFromPreferences(list.get(position));
                 }
                 else{
-                    Log.d("dbg_watsup", "clicky add");
                     c.addFavoriteToPreferences(list.get(position));
                 }
                 c.refreshLists();
@@ -229,7 +228,6 @@ public class ServersActivity extends MenuActivity {
 
     void removeFavoriteFromPreferences(ServerListInfo fav){
         ArrayList<ServerListInfo> favs = getFavoritesFromPreferences();
-        Log.d("dbg_www","removin");
         int index = -1;
         for(int i = 0; i < favs.size(); i++){
             if (favs.get(i).getIp().equals(fav.getIp())){
@@ -240,7 +238,6 @@ public class ServersActivity extends MenuActivity {
         if(index > -1){
             favs.remove(index);
         }
-        Log.d("dbg_www","removed");
         setFavoritesToPreferences(favs);
     }
 

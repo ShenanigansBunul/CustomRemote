@@ -17,5 +17,6 @@ public class ScreenActivity extends MenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen);
+        this.getSupportActionBar().setTitle("Desktop Screen");
     }
 }

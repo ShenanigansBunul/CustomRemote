@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="test">
-        <item>text_string</item>
-        <item>text_strin2</item>
+    <string-array name="Actions">
+        <item>Nothing</item>
+        <item>Click</item>
+        <item>Press Key</item>
+        <item>Wait</item>
     </string-array>
 </resources>

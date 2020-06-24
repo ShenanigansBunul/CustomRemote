@@ -31,6 +31,7 @@ public class RemoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remote);
         LinearLayout mainLayout = findViewById(R.id.mainList);
+        this.getSupportActionBar().setTitle("Remote (NAME HERE)");
         CommandServer cs = CommandServer.getInstance();
 
         width = 3;

@@ -33,6 +33,7 @@ public class TrackpadActivity extends MenuActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.getSupportActionBar().setTitle("Trackpad");
         final CommandServer cs = CommandServer.getInstance();
         setContentView(R.layout.activity_trackpad);
         final SurfaceView surfaceView = findViewById(R.id.surfaceView);

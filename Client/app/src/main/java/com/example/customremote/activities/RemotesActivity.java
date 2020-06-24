@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,12 +33,14 @@ import com.example.customremote.RemoteButtonAction;
 import com.example.customremote.ServerListInfo;
 import com.example.customremote.actions.KeyPress;
 import com.example.customremote.actions.MouseClick;
+import com.example.customremote.RemoteListJsonConverter;
 import com.example.customremote.actions.Wait;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -69,7 +72,7 @@ class RemoteListAdapter extends BaseAdapter implements ListAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -90,7 +93,8 @@ class RemoteListAdapter extends BaseAdapter implements ListAdapter {
             public void onClick(View v) {
                 Intent intent = new Intent(context, RemoteActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("activity_name", nameText.getText().toString());
+                intent.putExtra("remote_name", list.get(position).getName());
+                intent.putExtra("all_data",RemoteListJsonConverter.remoteListToJson(list));
                 context.getApplicationContext().startActivity(intent);
             }
         });
@@ -100,7 +104,8 @@ class RemoteListAdapter extends BaseAdapter implements ListAdapter {
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditRemoteActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("activity_name", nameText.getText().toString());
+                intent.putExtra("remote_name", list.get(position).getName());
+                intent.putExtra("all_data",RemoteListJsonConverter.remoteListToJson(list));
                 context.getApplicationContext().startActivity(intent);
             }
         });
@@ -113,135 +118,43 @@ public class RemotesActivity extends MenuActivity {
     RemoteListAdapter rla;
     ArrayList<Remote> remotes;
 
-    /*ArrayList<Remote> getRemotesFromPreferences() {
-        try {
-            SharedPreferences sharedPref = RemotesActivity.this.getPreferences(Context.MODE_PRIVATE);
-            String resp = sharedPref.getString("remote_list", "[]");
-            JSONArray j = new JSONArray(resp);
-            ArrayList<Remote> r = new ArrayList<>();
-            for (int i = 0; i < j.length(); i++) {
-                JSONArray jj = (JSONArray) j.get(i);
-                String name = jj.getString(0);
-                int w = jj.getInt(1);
-                int h = jj.getInt(2);
-                r.add(new Remote(name, w, h));
-            }
-            Log.d("dbg",r.toString());
-            return r;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    void setRemotesToPreferences(ArrayList<Remote> rems) {
-        SharedPreferences sharedPref = RemotesActivity.this.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        ArrayList<ArrayList<String>> a = new ArrayList<>();
-        for (Remote i : rems) {
-            a.add(i.toArrayList());
-        }
-        JSONArray j = new JSONArray(a);
-        editor.putString("remote_list", String.valueOf(j)).apply();
-    }*/
-
     ArrayList<Remote> getRemotesFromPreferences() {
-        try {
-            SharedPreferences sharedPref = RemotesActivity.this.getPreferences(Context.MODE_PRIVATE);
-            String resp = sharedPref.getString("remote_list", "{}");
-
-            JSONObject j = new JSONObject(resp);
-            ArrayList<Remote> r = new ArrayList<>();
-            for (Iterator<String> it = j.keys(); it.hasNext(); ) {
-                String k = it.next();
-                if (j.get(k) instanceof JSONObject) {
-                    JSONObject a = (JSONObject) j.get(k);
-                    Remote rem = new Remote(k, Integer.parseInt(a.getString("width")), Integer.parseInt(a.getString("height")));
-                    JSONArray bJsonArray = a.getJSONArray("buttons");
-                    ArrayList<RemoteButton> rb = new ArrayList<>();
-                    for (int m = 0; m < bJsonArray.length(); m++) {
-                        JSONObject but = bJsonArray.getJSONObject(m);
-                        RemoteButton remBut = new RemoteButton(but.getString("text"));
-                        rem.addButton(remBut);
-
-                        JSONArray baJsonArray = but.getJSONArray("actions");
-                        for (int n = 0; n < baJsonArray.length(); n++) {
-                            JSONObject act = baJsonArray.getJSONObject(n);
-                            RemoteButtonAction ac = new Wait();
-                            String type = act.getString("type");
-                            if (type.equals("wait")) {
-                                ac = new Wait();
-                            } else if (type.equals("keypress")) {
-                                ac = new KeyPress();
-                            } else if (type.equals("mouseclick")) {
-                                ac = new MouseClick();
-                            }
-                            Map<String, String> params = new HashMap<>();
-                            JSONObject parJson = act.getJSONObject("params");
-                            for (Iterator<String> it2 = parJson.keys(); it2.hasNext(); ) {
-                                String k2 = it2.next();
-                                if (parJson.get(k2) instanceof String) {
-                                    params.put(k2, (String) parJson.get(k2));
-                                }
-                            }
-                            ac.setParams(params);
-                        }
-                        rb.add(remBut);
-                    }
-                    r.add(rem);
-                }
-            }
-            return r;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
+        SharedPreferences sharedPref = RemotesActivity.this.getPreferences(Context.MODE_PRIVATE);
+        String resp = sharedPref.getString("remote_list", "{}");
+        return RemoteListJsonConverter.jsonToRemoteList(resp);
     }
 
     void setRemotesToPreferences(ArrayList<Remote> rems) {
         SharedPreferences sharedPref = RemotesActivity.this.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        try {
-            JSONObject j = new JSONObject();
-            for (Remote r : rems) {
-                JSONObject rJson = new JSONObject();
-                rJson.put("width", r.getWidth());
-                rJson.put("height", r.getHeight());
-                JSONArray bJsonArray = new JSONArray();
-                for (RemoteButton b : r.getButtons()) {
-                    JSONObject bJson = new JSONObject();
-                    bJson.put("text", b.getText());
-                    bJsonArray.put(bJson);
+        String x = RemoteListJsonConverter.remoteListToJson(rems);
+        editor.putString("remote_list", x).apply();
+    }
 
-                    JSONArray baJsonArray = new JSONArray();
-                    for (RemoteButtonAction rba : b.getActions()) {
-                        JSONObject rbaJson = new JSONObject();
-                        rbaJson.put("type", rba.type);
-                        JSONObject params_json = new JSONObject();
-                        rbaJson.put("params", params_json);
-                        for (Map.Entry<String, String> entry : rba.getParams().entrySet()) {
-                            params_json.put(entry.getKey(), entry.getValue());
-                        }
-                        baJsonArray.put(rbaJson);
-                    }
-                    bJson.put("actions", baJsonArray);
-                }
-                rJson.put("buttons", bJsonArray);
-                j.put(r.getName(), rJson);
-            }
-            editor.putString("remote_list", String.valueOf(j)).apply();
-        } catch (JSONException e) {
-            e.printStackTrace();
+    ArrayList<Remote> getUpdatedRemotes(){
+        Intent i = getIntent();
+        String updated = i.getStringExtra("updated_list");
+        if(updated != null) {
+            ArrayList<Remote> newRemotes = RemoteListJsonConverter.jsonToRemoteList(updated);
+            setRemotesToPreferences(newRemotes);
+            return newRemotes;
         }
+        return getRemotesFromPreferences();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        remotes = getUpdatedRemotes();
+        rla.notifyDataSetChanged();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        remotes = new ArrayList<>();
         setContentView(R.layout.activity_remotes);
         this.getSupportActionBar().setTitle("Remote List");
-        remotes = getRemotesFromPreferences();
+        remotes = getUpdatedRemotes();
         rla = new RemoteListAdapter(remotes, this.getApplicationContext());
         ListView lv = findViewById(R.id.listviewRemotes);
         Button add = findViewById(R.id.addRemoteBtn);
