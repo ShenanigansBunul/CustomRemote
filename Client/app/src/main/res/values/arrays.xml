@@ -18,4 +18,8 @@
         <item>Windows</item>
         <item>Tab</item>
     </string-array>
+    <string-array name="Clicks">
+        <item>Left</item>
+        <item>Right</item>
+    </string-array>
 </resources>

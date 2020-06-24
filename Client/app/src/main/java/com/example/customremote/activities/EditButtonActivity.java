@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -57,6 +58,43 @@ public class EditButtonActivity extends AppCompatActivity {
         return 0;
     }
 
+    void initializerSetParam(int pos, String k, String v){
+        actions.get(pos).setParam(k,v);
+    }
+
+    LinearLayout initializeSpinnerParam(String label, final String key, final int act_pos, int arr){
+        final RemoteButtonAction q = actions.get(act_pos);
+        LayoutInflater clickParamInflater = (LayoutInflater) EditButtonActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final LinearLayout clickParamLayout = (LinearLayout) clickParamInflater.inflate(R.layout.param_spinner, null);
+        final TextView paramName = clickParamLayout.findViewById(R.id.paramName);
+        final Spinner paramInput = clickParamLayout.findViewById(R.id.paramInput);
+        paramName.setText(label);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, arr, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        paramInput.setAdapter(adapter);
+        int p;
+        if(q.getParams().get(key) != null)
+            p = Integer.parseInt(q.getParams().get(key));
+        else
+            p = 0;
+        paramInput.setSelection(p);
+
+        paramInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                initializerSetParam(act_pos, key, String.valueOf(position));
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        return clickParamLayout;
+    }
+
+    LinearLayout initializeEditTextParam(){
+        return null;
+    }
+
     void updateActionLayout(){
         LinearLayout actionLayout = findViewById(R.id.actionsLayout);
         actionLayout.removeAllViews();
@@ -73,7 +111,7 @@ public class EditButtonActivity extends AppCompatActivity {
             final int oldPosition = typeSpinner.getSelectedItemPosition();
 
             final LinearLayout paramLayout = action.findViewById(R.id.paramLayout);
-
+            final int qPos = i;
             typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -87,6 +125,7 @@ public class EditButtonActivity extends AppCompatActivity {
                         final TextView paramName = timeParamLayout.findViewById(R.id.paramName);
                         final EditText paramInput = timeParamLayout.findViewById(R.id.paramInput);
                         paramName.setText("Duration (ms):");
+
                         String tString = q.getParams().get("wait");
                         if (tString != null)
                             paramInput.setText(tString);
@@ -110,15 +149,40 @@ public class EditButtonActivity extends AppCompatActivity {
                             public void afterTextChanged(Editable s) {
                             }
                         });
-
                         paramLayout.addView(timeParamLayout);
-
                     } else if (selected.equals("Press Key")) {
+                        LayoutInflater keysParamInflater = (LayoutInflater) EditButtonActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        final LinearLayout keysParamLayout = (LinearLayout) keysParamInflater.inflate(R.layout.param_edit_text, null);
+                        final TextView paramName = keysParamLayout.findViewById(R.id.paramName);
+                        final EditText paramInput = keysParamLayout.findViewById(R.id.paramInput);
+                        paramName.setText("Key(s) to press:");
 
+                        String tString = q.getParams().get("keys");
+                        if (tString != null)
+                            paramInput.setText(tString);
+                        else
+                            paramInput.setText("");
+
+                        paramInput.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                String p = paramInput.getText().toString();
+                                q.setParam("keys", p);
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                            }
+                        });
+                        paramLayout.addView(keysParamLayout);
                     } else if (selected.equals("Click")) {
-
+                        paramLayout.addView(initializeSpinnerParam("Type:", "click", qPos, R.array.Clicks));
                     } else if (selected.equals("Press Key (Special)")) {
-
+                        paramLayout.addView(initializeSpinnerParam("Key:","special", qPos, R.array.Keys));
                     }
 
                     if(position != oldPosition)
@@ -142,7 +206,6 @@ public class EditButtonActivity extends AppCompatActivity {
                 }
             });
         }
-        Log.d("d","upd8");
     }
 
     @Override
