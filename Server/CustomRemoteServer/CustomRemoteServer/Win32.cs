@@ -6,9 +6,9 @@ public class Win32
     [DllImport("user32.dll", SetLastError = true)]
     public static extern uint SendInput(uint numberOfInputs, INPUT[] inputs, int sizeOfInputStructure);
 
-
     [DllImport("user32.dll")]
     public static extern IntPtr GetForegroundWindow();
+
     [DllImport("user32.dll")]
     public static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
     [DllImport("User32.Dll")]

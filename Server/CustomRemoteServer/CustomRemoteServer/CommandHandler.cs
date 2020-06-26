@@ -80,7 +80,7 @@ namespace CustomRemoteServer
                 { '*', KeyCode.L9 },
                 { '(', KeyCode.L10 },
                 { ')', KeyCode.L11 },
-                { '-', KeyCode.L12 },
+                { '_', KeyCode.L12 },
                 { '+', KeyCode.L13 },
                 { '{', KeyCode.L14 },
                 { '}', KeyCode.L15 },
