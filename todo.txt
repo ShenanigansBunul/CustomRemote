@@ -1,0 +1,6 @@
+* Acces continut ecran asemanator RFB (se trimit regiuni de ecran ce isi modifica continutul)
+* File explorer
+* Actiune de executat fisiere pentru butoane
+* Functionalitate combinatii de taste pentru butoane
+* Stocare remote-uri in fisiere, in loc de SharedPreferences, pentru functionalitate de export/import)
+* Imbunatatirea interfetei selectiei butoanelor
